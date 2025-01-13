@@ -3,7 +3,7 @@
 //const { application } = require("express");
 import express from "express";
 import cors from "cors";
-import pg, { Pool } from "pg";
+import pg from "pg";
 import dotenv from "dotenv"
 
 //========================
@@ -14,6 +14,8 @@ const app = express()
 
 app.use(express.json())
 app.use(cors());
+
+const dbConnectionString = process.env.DATABASE_URL;
 
 app.post("guestBook", function (req, res) {
     console.log("this is the req,body", req,body);
@@ -29,7 +31,9 @@ app.get("/", (req, res) => {
 //=================================
 
 
-const dbConnectionString = process.env.DATABASE_URL;
+
+
+
 
 export const db = new pg.Pool({
     connectionString: dbConnectionString,
@@ -44,11 +48,11 @@ const query = await db.query(
 await res,json(query.rows);
 });
 
-//app.listen(8080, function() {
-//    console.log("Server listneing on port 8080");
-//});
-
  const PORT = 8080;
  app.listen(PORT, () => {
   console.log(`Server running on PORT ${PORT}`);
  });
+
+ db.connect()
+  .then(() => console.log("Connected to DB"))
+  .catch((err) => console.log("Error connecting to DB"));
