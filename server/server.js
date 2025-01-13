@@ -1,3 +1,7 @@
+dotenv.config();
+
+const dbConnectionString = process.env.DATABASE_URL;
+
 //=========================== IMPORTS
 
 //const { application } = require("express");
@@ -7,7 +11,7 @@ import pg from "pg";
 import dotenv from "dotenv"
 
 //========================
-dotenv.config();
+
 
 const app = express()
 
@@ -15,7 +19,7 @@ const app = express()
 app.use(express.json())
 app.use(cors());
 
-const dbConnectionString = process.env.DATABASE_URL;
+
 
 app.post("guestBook", function (req, res) {
     console.log("this is the req,body", req,body);
@@ -39,11 +43,11 @@ export const db = new pg.Pool({
     connectionString: dbConnectionString,
 });
 
-app.post("/new-data", async (req, res)=> {
+app.post("/form", async (req, res)=> {
 const data = req.body.formValues;
 const query = await db.query(
     `INSERT INTO table_name (col, col2, col3) VALUES ($1, $2, $3)`,
-    [data.input1, data,input2, data,input3]
+    [data.input1, data.input2, data,input3]
 );
 await res,json(query.rows);
 });
